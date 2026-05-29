@@ -1,11 +1,16 @@
 from groq import Groq
 from dotenv import load_dotenv
 import os
+import streamlit as st
 
 load_dotenv()
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+def get_client():
+    api_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY", "")
+    return Groq(api_key=api_key)
 
 def analyze_news(text):
+    client = get_client()
     prompt = f"""
 তুমি একজন বাংলাদেশের expert fact-checker।
 নিচের বাংলা নিউজটি বিশ্লেষণ করো।
