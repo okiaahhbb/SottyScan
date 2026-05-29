@@ -16,7 +16,7 @@ load_css()
 show_hero()
 show_sidebar(st.session_state.history)
 
-tab1, tab2 = st.tabs(["📝 Text Paste", "🔗 URL দিন"])
+tab1, tab2, tab3 = st.tabs(["📝 Text Paste", "🔗 URL দিন", "📸 Image/Screenshot"])
 
 text = ""
 with tab1:
@@ -35,6 +35,18 @@ with tab2:
             st.success(f"✅ {len(extracted)} characters extract হয়েছে!")
         else:
             st.error("❌ URL থেকে text extract করা যায়নি।")
+
+with tab3:
+    uploaded = st.file_uploader("Screenshot বা Image upload করুন:", type=["png", "jpg", "jpeg"])
+    if uploaded:
+        from utils import extract_text_from_image
+        extracted = extract_text_from_image(uploaded)
+        if extracted:
+            text = extracted
+            st.success(f"✅ {len(extracted)} characters extract হয়েছে!")
+            st.text_area("Extract হওয়া text:", value=extracted, height=100)
+        else:
+            st.error("❌ Image থেকে text extract করা যায়নি।")
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
