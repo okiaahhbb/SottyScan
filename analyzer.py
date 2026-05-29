@@ -19,6 +19,7 @@ def analyze_news(text):
 
 শুধুমাত্র এই EXACT format এ উত্তর দাও:
 VERDICT: [সত্যি অথবা মিথ্যা অথবা সন্দেহজনক]
+SUSPICIOUS WORDS: [suspicious বা emotionally charged শব্দগুলো comma দিয়ে লেখো]
 CONFIDENCE: [শুধু সংখ্যা, যেমন 85]
 কারণ: [২-৩ লাইনে বাংলায়]
 EMOTION: [ভয় অথবা রাগ অথবা ধর্মীয় উস্কানি অথবা দেশপ্রেম অথবা করুণা অথবা নিরপেক্ষ]
@@ -35,13 +36,15 @@ RED FLAGS:
     )
     result = response.choices[0].message.content
 
-    verdict = reason = emotion = manipulation = category = ""
+    verdict = reason = emotion = manipulation = category = suspicious_words = ""
     confidence_num = 50
     red_flags = []
 
     for line in result.strip().split('\n'):
         if line.startswith("VERDICT:"):
             verdict = line.replace("VERDICT:", "").strip()
+        elif line.startswith("SUSPICIOUS WORDS:"):
+            suspicious_words = line.replace("SUSPICIOUS WORDS:", "").strip()
         elif line.startswith("CONFIDENCE:"):
             try:
                 confidence_num = int(line.replace("CONFIDENCE:", "").strip().replace("%", ""))
@@ -65,5 +68,6 @@ RED FLAGS:
         "emotion": emotion,
         "manipulation": manipulation,
         "category": category,
+        "suspicious_words": suspicious_words,
         "red_flags": red_flags
     }

@@ -64,6 +64,6 @@ if analyze:
                 "emotion": result["emotion"]
             })
 
-            show_result(result)
+            show_result(result, text)
     else:
         st.warning("⚠️ আগে কিছু লিখুন বা URL দিন!")
